@@ -24,8 +24,22 @@
 </head>
 
 <body>
+  <form>
+    <input id="m" value="foo" />
+    <input type="submit" />
+  </form>
   <div style="position: absolute; top: 10px; width: 100%; text-align: center; color:#eee">
     <a href="http://threejs.org" target="_blank">three.js</a> - GPU particle system plugin by <a href="http://charliehoey.com">Charlie Hoey</a>.</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+       });
+    </script>
 
   <script src="./lib/three.min.js"></script>
   <script src="./lib/TrackballControls.js"></script>
