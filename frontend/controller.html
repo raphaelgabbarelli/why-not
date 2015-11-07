@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Controller</title>
+	<meta name="viewport" content="width=device-width,user-scalable=yes" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+	<script src="./lib/controller.js"></script>
+</head>
+
+<body class="container">
+  <div class="page-header">
+    <h1>Controller <small>for unrealistic rowing simulator</small></h1>
+  </div>
+
+  <table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+
+		<tbody>
+	    <tr><th>emitting:</th><td id="emitting"></td></tr>
+	    <tr><th>acceleration x:</th><td id="accelerationX"></td></tr>
+	    <tr><th>acceleration y:</th><td id="accelerationY"></td></tr>
+	    <tr><th>acceleration z:</th><td id="accelerationZ"></td></tr>
+	    <tr><th>rotation alpha:</th><td id="rotationAlpha"></td></tr>
+	    <tr><th>rotation beta:</th><td id="rotationBeta"></td></tr>
+	    <tr><th>rotation gamma:</th><td id="rotationGamma"></td></tr>
+		</tbody>
+  </table>
+</body>
+</html>
