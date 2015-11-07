@@ -7,22 +7,27 @@ if ( ! Detector.webgl ) {
 
 }
 
-socket.on("msg", function(msg) {
-  pointLightL.position.x = msg.x;
-  pointLightL.position.y = msg.y;
-  pointLightL.position.z = msg.z;
+socket.on("s2b", function(msg) {
+  // console.log(msg);
+  var x = msg.message.x * 20 - 1500,
+      y = msg.message.y * 3 + 150,
+      z = 0;
 
-  pointLightR.position.x = msg.x;
-  pointLightR.position.y = msg.y;
-  pointLightR.position.z = msg.z-1500;
+  pointLightL.position.x = x;
+  pointLightL.position.y = y;
+  pointLightL.position.z = z;
 
-  particlesL.position.x = msg.x;
-  particlesL.position.y = msg.y;
-  particlesL.position.z = msg.z;
+  pointLightR.position.x = x;
+  pointLightR.position.y = y;
+  pointLightR.position.z = z-1500;
 
-  particlesR.position.x = msg.x;
-  particlesR.position.y = msg.y;
-  particlesR.position.z = msg.z-1500;
+  particlesL.position.x = x;
+  particlesL.position.y = y;
+  particlesL.position.z = z;
+
+  particlesR.position.x = x;
+  particlesR.position.y = y;
+  particlesR.position.z = z-1500;
 });
 
 var container, stats;
@@ -38,36 +43,35 @@ var clock = new THREE.Clock(true);
 // particlesL passed during each spawned
 var particlesL = {
   position: new THREE.Vector3(),
-  positionRandomness: .3,
+  positionRandomness: 0,
   velocity: new THREE.Vector3(),
-  velocityRandomness: .5,
+  velocityRandomness: 0,
   color: 0xff99ff,
   colorRandomness: .5,
-  turbulence: .5,
-  lifetime: 2,
+  turbulence: 0,
+  lifetime: 40,
   size: 2,
   sizeRandomness: 2
 };
 var particlesR = {
   position: new THREE.Vector3(),
-  positionRandomness: .3,
+  positionRandomness: 0,
   velocity: new THREE.Vector3(),
-  velocityRandomness: .5,
+  velocityRandomness: 0,
   color: 0xff99ff,
   colorRandomness: .5,
-  turbulence: .5,
-  lifetime: 2,
+  turbulence: 0,
+  lifetime: 40,
   size: 2,
   sizeRandomness: 2
 };
 
 var spawnerparticlesL = {
   spawnRate: 1,
-  horizontalSpeed: 1.5,
-  verticalSpeed: 1.33,
+  horizontalSpeed: 0,
+  verticalSpeed: 0,
   timeScale: 1
 }
-
 
 var parameters = {
   width: 2000,

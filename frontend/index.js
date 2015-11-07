@@ -11,6 +11,7 @@ app.get('/', function(req, res){
 app.use('/lib', express.static('lib'));
 app.use('/models', express.static('models'));
 app.use('/img', express.static('img'));
+app.use('/client', express.static('client.html'));
 
 var cnt = 0;
 
@@ -21,14 +22,26 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 
-  var interval = setInterval(function () {
-    cnt++;
-    var x = Math.sin(cnt/10)*800 - 1500,
-        y = Math.cos(cnt/10)*100 + 100,
-        z = 0;
-
-    socket.emit("msg", {'x': x, 'y': y, 'z': z});
-  }, 30);
+  socket.on("c2s", function (data) {
+    console.log(data);
+    // ...emit a "message" event to every other socket
+    socket.broadcast.emit("s2b", {
+      channel: socket.channel,
+      message: data
+    });
+  });
+  // var interval = setInterval(function () {
+  //   cnt++;
+  //   var x = Math.sin(cnt/10)*800 - 1500,
+  //       y = Math.cos(cnt/10)*100 + 100,
+  //       z = 0;
+  //   var x = Math.sin(cnt/45) * (180 / Math.PI),
+  //       y = Math.cos(cnt/45) * (180 / Math.PI),
+  //       z = 0;
+  //
+  //
+  //   socket.emit("msg", {'x': x, 'y': y, 'z': z});
+  // }, 30);
 });
 
 http.listen(3000, function(){
