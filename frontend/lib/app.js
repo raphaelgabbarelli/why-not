@@ -16,10 +16,13 @@ socket.on("msg", function(msg) {
   pointLightR.position.y = msg.y;
   pointLightR.position.z = msg.z-1500;
 
-  options.position.x = msg.x;
-  options.position.y = msg.y;
-  options.position.z = msg.z;
-  console.log(msg);
+  particlesL.position.x = msg.x;
+  particlesL.position.y = msg.y;
+  particlesL.position.z = msg.z;
+
+  particlesR.position.x = msg.x;
+  particlesR.position.y = msg.y;
+  particlesR.position.z = msg.z-1500;
 });
 
 var container, stats;
@@ -32,22 +35,34 @@ var particleSystem;
 var tick = 0;
 var clock = new THREE.Clock(true);
 
-// options passed during each spawned
-var options = {
+// particlesL passed during each spawned
+var particlesL = {
   position: new THREE.Vector3(),
   positionRandomness: .3,
   velocity: new THREE.Vector3(),
   velocityRandomness: .5,
   color: 0xff99ff,
-  colorRandomness: .2,
-  turbulence: .05,
-  lifetime: 0.9,
-  size: 5,
-  sizeRandomness: 1
+  colorRandomness: .5,
+  turbulence: .5,
+  lifetime: 2,
+  size: 2,
+  sizeRandomness: 2
+};
+var particlesR = {
+  position: new THREE.Vector3(),
+  positionRandomness: .3,
+  velocity: new THREE.Vector3(),
+  velocityRandomness: .5,
+  color: 0xff99ff,
+  colorRandomness: .5,
+  turbulence: .5,
+  lifetime: 2,
+  size: 2,
+  sizeRandomness: 2
 };
 
-var spawnerOptions = {
-  spawnRate: 150,
+var spawnerparticlesL = {
+  spawnRate: 1,
   horizontalSpeed: 1.5,
   verticalSpeed: 1.33,
   timeScale: 1
@@ -85,12 +100,14 @@ function initScene () {
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.BasicShadowMap;
   container.appendChild( renderer.domElement );
 
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 0.5, 3000000 );
-  camera.position.set( 2000, 750, 2000 );
+  camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.5, 3000000 );
+  camera.position.set( 1000, 750, 1000 );
 
   controls = new THREE.OrbitControls( camera, renderer.domElement );
   controls.enablePan = false;
@@ -189,7 +206,12 @@ function initBoat () {
   var loader = new THREE.STLLoader();
     loader.load( './models/rowing_boat.stl', function ( geometry ) {
 
-      var material = new THREE.MeshPhongMaterial( { color: 0xA52A2A, specular: 0x111111, shininess: 200 } );
+      var material = new THREE.MeshPhongMaterial( {
+					color: 0x966F33,
+					shininess: 10,
+					specular: 0x111111,
+					shading: THREE.SmoothShading
+				} );
       var mesh = new THREE.Mesh( geometry, material );
 
       mesh.position.set( 0, -120, 0 );
@@ -207,14 +229,14 @@ function initBoat () {
 function initFireflies () {
   function createLight( color ) {
     var newLight = new THREE.PointLight( color, 1, 30 );
-    newLight.castShadow = false;
+    newLight.castShadow = true;
     newLight.shadowCameraNear = 1;
-    newLight.shadowCameraFar = 300000000;
-    newLight.shadowCameraVisible = true;
-    newLight.shadowMapWidth = 2048;
-    newLight.shadowMapHeight = 1024;
-    newLight.shadowBias = 0.01;
-    newLight.shadowDarkness = 0.5;
+    newLight.shadowCameraFar = 300000;
+    // newLight.shadowCameraVisible = true;
+    newLight.shadowMapWidth = 204;
+    newLight.shadowMapHeight = 102;
+    newLight.shadowBias = 0.1;
+    newLight.shadowDarkness = 0.2;
 
     var geometry = new THREE.SphereGeometry( 20, 16, 16 );
     var material = new THREE.MeshBasicMaterial( { color: color } );
@@ -251,13 +273,14 @@ function render() {
 
   var time = performance.now() * 0.001;
 
-  var delta = clock.getDelta() * spawnerOptions.timeScale;
+  var delta = clock.getDelta() * spawnerparticlesL.timeScale;
   tick += delta;
 
   if (tick < 0) tick = 0;
 
   if (delta > 0) {
-    particleSystem.spawnParticle(options);
+    particleSystem.spawnParticle(particlesL);
+    particleSystem.spawnParticle(particlesR);
   }
 
   particleSystem.update(tick);
