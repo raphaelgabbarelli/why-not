@@ -12,4 +12,4 @@ npm Install
 ```
 node index.js
 ```
-4. Navigate to [http://localhost:3000](localhost:3000) in your browser.
+4. Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
