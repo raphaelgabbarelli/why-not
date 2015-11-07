@@ -26,6 +26,10 @@ io.on('connection', function(socket){
     var x = Math.sin(cnt/10)*800 - 1500,
         y = Math.cos(cnt/10)*100 + 100,
         z = 0;
+    var x = Math.sin(cnt/45) * (180 / Math.PI),
+        y = Math.cos(cnt/45) * (180 / Math.PI),
+        z = 0;
+
 
     socket.emit("msg", {'x': x, 'y': y, 'z': z});
   }, 30);
