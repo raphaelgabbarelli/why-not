@@ -28,7 +28,7 @@ io.on('connection', function(socket){
         z = 0;
 
     socket.emit("msg", {'x': x, 'y': y, 'z': z});
-  }, 100);
+  }, 30);
 });
 
 http.listen(3000, function(){

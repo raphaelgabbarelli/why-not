@@ -15,6 +15,10 @@ socket.on("msg", function(msg) {
   pointLightR.position.x = msg.x;
   pointLightR.position.y = msg.y;
   pointLightR.position.z = msg.z-1500;
+
+  options.position.x = msg.x;
+  options.position.y = msg.y;
+  options.position.z = msg.z;
   console.log(msg);
 });
 
@@ -24,6 +28,31 @@ var sphere;
 var light;
 var pointLightR;
 var pointLightL;
+var particleSystem;
+var tick = 0;
+var clock = new THREE.Clock(true);
+
+// options passed during each spawned
+var options = {
+  position: new THREE.Vector3(),
+  positionRandomness: .3,
+  velocity: new THREE.Vector3(),
+  velocityRandomness: .5,
+  color: 0xff99ff,
+  colorRandomness: .2,
+  turbulence: .05,
+  lifetime: 0.9,
+  size: 5,
+  sizeRandomness: 1
+};
+
+var spawnerOptions = {
+  spawnRate: 150,
+  horizontalSpeed: 1.5,
+  verticalSpeed: 1.33,
+  timeScale: 1
+}
+
 
 var parameters = {
   width: 2000,
@@ -46,6 +75,7 @@ function init() {
   initSkyBox();
   initBoat();
   initFireflies();
+  initParticles();
 }
 
 function initScene () {
@@ -208,9 +238,30 @@ function animate() {
 
 }
 
+function initParticles () {
+  particleSystem = new THREE.GPUParticleSystem({
+    maxParticles: 2500
+  });
+  scene.add( particleSystem);
+
+
+}
+
 function render() {
 
   var time = performance.now() * 0.001;
+
+  var delta = clock.getDelta() * spawnerOptions.timeScale;
+  tick += delta;
+
+  if (tick < 0) tick = 0;
+
+  if (delta > 0) {
+    particleSystem.spawnParticle(options);
+  }
+
+  particleSystem.update(tick);
+
 
   water.material.uniforms.time.value += 1.0 / 60.0;
   controls.update();
