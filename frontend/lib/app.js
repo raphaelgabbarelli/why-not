@@ -7,9 +7,10 @@ if ( ! Detector.webgl ) {
 
 }
 
-socket.on("msg", function(msg) {
-  var x = msg.x * 20 - 1500,
-      y = msg.y * 3 + 150,
+socket.on("s2b", function(msg) {
+  // console.log(msg);
+  var x = msg.message.x * 20 - 1500,
+      y = msg.message.y * 3 + 150,
       z = 0;
 
   pointLightL.position.x = x;

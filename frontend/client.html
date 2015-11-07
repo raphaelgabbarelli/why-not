@@ -7,6 +7,7 @@
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
 	var socket = io();
+	var cnt = 0;
   var interval = setInterval(function () {
     cnt++;
     var x = Math.sin(cnt/10)*800 - 1500,
@@ -16,8 +17,11 @@
         y = Math.cos(cnt/45) * (180 / Math.PI),
         z = 0;
 
-    socket.emit("msg", {'x': x, 'y': y, 'z': z});
-  }, 30);
+		var data = {'x': x, 'y': y, 'z': z};
+
+		document.getElementById("emitting").innerHTML = JSON.stringify(data);
+    socket.emit("c2s", data);
+  }, 300);
 </script>
 <style>
 body {
@@ -39,6 +43,7 @@ body {
     <h1>Accelerometer Javascript Test</h1>
     <div id="sphere"></div>
 <ul>
+	<li>emitting: <span id="emitting"></span></li>
 	<li>acceleration x: <span id="accelerationX"></span>g</li>
 	<li>acceleration y: <span id="accelerationY"></span>g</li>
 	<li>acceleration z: <span id="accelerationZ"></span>g</li>
@@ -59,6 +64,12 @@ var sphere = document.getElementById("sphere");
 
 if (window.DeviceMotionEvent != undefined) {
 	window.ondevicemotion = function(e) {
+		var newData = {
+			x: e.accelerationIncludingGravity.x,
+			y: e.accelerationIncludingGravity.y,
+			z: e.accelerationIncludingGravity.z
+		};
+    socket.emit("c2s", newData);
 		ax = event.accelerationIncludingGravity.x * 5;
 		ay = event.accelerationIncludingGravity.y * 5;
 		document.getElementById("accelerationX").innerHTML = e.accelerationIncludingGravity.x;
