@@ -1,3 +1,5 @@
+var socket = io();
+
 if ( ! Detector.webgl ) {
 
   Detector.addGetWebGLMessage();
@@ -5,10 +7,23 @@ if ( ! Detector.webgl ) {
 
 }
 
+socket.on("msg", function(msg) {
+  pointLightL.position.x = msg.x;
+  pointLightL.position.y = msg.y;
+  pointLightL.position.z = msg.z;
+
+  pointLightR.position.x = msg.x;
+  pointLightR.position.y = msg.y;
+  pointLightR.position.z = msg.z-1500;
+  console.log(msg);
+});
+
 var container, stats;
 var camera, scene, renderer;
 var sphere;
 var light;
+var pointLightR;
+var pointLightL;
 
 var parameters = {
   width: 2000,
@@ -30,6 +45,7 @@ function init() {
   initWater();
   initSkyBox();
   initBoat();
+  initFireflies();
 }
 
 function initScene () {
@@ -158,12 +174,37 @@ function initBoat () {
     } );
 }
 
-//
+function initFireflies () {
+  function createLight( color ) {
+    var newLight = new THREE.PointLight( color, 1, 30 );
+    newLight.castShadow = false;
+    newLight.shadowCameraNear = 1;
+    newLight.shadowCameraFar = 300000000;
+    newLight.shadowCameraVisible = true;
+    newLight.shadowMapWidth = 2048;
+    newLight.shadowMapHeight = 1024;
+    newLight.shadowBias = 0.01;
+    newLight.shadowDarkness = 0.5;
+
+    var geometry = new THREE.SphereGeometry( 20, 16, 16 );
+    var material = new THREE.MeshBasicMaterial( { color: color } );
+    var sphere = new THREE.Mesh( geometry, material );
+    newLight.add( sphere );
+
+    return newLight
+  }
+  pointLightL = createLight( 0xaa0000 );
+  scene.add( pointLightL );
+
+  pointLightR = createLight( 0x0000aa );
+  scene.add( pointLightR );
+}
 
 function animate() {
 
   requestAnimationFrame( animate );
   render();
+
 
 }
 
