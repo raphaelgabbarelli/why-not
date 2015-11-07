@@ -29,6 +29,7 @@ function init() {
   initScene();
   initWater();
   initSkyBox();
+  initBoat();
 }
 
 function initScene () {
@@ -136,6 +137,25 @@ function initSkyBox () {
   );
 
   scene.add( skyBox );
+}
+
+function initBoat () {
+  var loader = new THREE.STLLoader();
+    loader.load( './models/rowing_boat.stl', function ( geometry ) {
+
+      var material = new THREE.MeshPhongMaterial( { color: 0xA52A2A, specular: 0x111111, shininess: 200 } );
+      var mesh = new THREE.Mesh( geometry, material );
+
+      mesh.position.set( 0, -120, 0 );
+      mesh.rotation.set( - Math.PI / 2, 0, 0 );
+      mesh.scale.set( 20.1, 20.1, 20.1 );
+
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+
+      scene.add( mesh );
+
+    } );
 }
 
 //
