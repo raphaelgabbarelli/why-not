@@ -11,37 +11,23 @@ app.get('/', function(req, res){
 app.use('/lib', express.static('lib'));
 app.use('/models', express.static('models'));
 app.use('/img', express.static('img'));
-app.use('/client', express.static('client.html'));
-
-var cnt = 0;
+app.use('/controller.html', express.static('controller.html'));
+app.use('/display.html', express.static('display.html'));
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  console.log('User connected');
 
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log('User disconnected');
   });
 
-  socket.on("c2s", function (data) {
-    console.log(data);
-    // ...emit a "message" event to every other socket
-    socket.broadcast.emit("s2b", {
+  socket.on("controller2server", function (data) {
+    console.log('Passing through data ', data);
+    socket.broadcast.emit("server2display", {
       channel: socket.channel,
       message: data
     });
   });
-  // var interval = setInterval(function () {
-  //   cnt++;
-  //   var x = Math.sin(cnt/10)*800 - 1500,
-  //       y = Math.cos(cnt/10)*100 + 100,
-  //       z = 0;
-  //   var x = Math.sin(cnt/45) * (180 / Math.PI),
-  //       y = Math.cos(cnt/45) * (180 / Math.PI),
-  //       z = 0;
-  //
-  //
-  //   socket.emit("msg", {'x': x, 'y': y, 'z': z});
-  // }, 30);
 });
 
 http.listen(3000, function(){

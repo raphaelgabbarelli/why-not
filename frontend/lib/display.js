@@ -7,11 +7,11 @@ if ( ! Detector.webgl ) {
 
 }
 
-socket.on("s2b", function(msg) {
+socket.on("server2display", function(msg) {
   // console.log(msg);
-  var x = msg.message.x * 20 - 1500,
-      y = msg.message.y * 3 + 150,
-      z = 0;
+  var x = msg.message.x * 60 - 1500,
+      y = msg.message.z * 9 + 150,
+      z = msg.message.y * 10;
 
   pointLightL.position.x = x;
   pointLightL.position.y = y;

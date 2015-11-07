@@ -2,31 +2,41 @@
 <html lang="en">
 
 <head>
-  <title>three.js - gpu particle system</title>
+  <title>Why Not</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <style>
-    body {
-      background-color: #000000;
-      margin: 0px;
-      overflow: hidden;
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+  <style type="text/css">
+    .btn-lg {
+      padding-top: 2em;
+      padding-bottom: 2em;
     }
   </style>
 </head>
+<body class="container">
+  <div class="page-header">
+    <h1>Unrealistic rowing simulator <small>... why not?</small></h1>
+  </div>
 
-<body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="./lib/three.min.js"></script>
-  <script src="./lib/TrackballControls.js"></script>
-  <script src="./lib/dat.gui.min.js"></script>
-  <script src="./lib/Detector.js"></script>
-  <script src="./lib/OrbitControls.js"></script>
-  <script src="./lib/stats.min.js"></script>
-  <script src="./lib/STLLoader.js"></script>
-  <script src="./lib/Mirror.js"></script>
-  <script src="./lib/WaterShader.js"></script>
-  <script src="./lib/GPUParticleSystem.js" charset="utf-8"></script>
-  <script src="./lib/app.js"></script>
+  <div class="row">
+    <div class="col-xs-12 col-md-5">
+      <a href="controller.html" class="btn btn-primary btn-lg btn-block">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        Remote controller
+      </a>
+    </div>
+    <div class="col-xs-12 col-md-2">
+      <a class="btn btn-link btn-lg btn-block disabled">
+        --- or ---
+      </a>
+    </div>
+    <div class="col-xs-12 col-md-5">
+      <a href="./display.html" class="btn btn-default btn-lg btn-block">
+        <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+        Display
+      </a>
+    </div>
+  </div>
 </body>
-
 </html>
