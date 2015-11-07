@@ -10,6 +10,7 @@ app.get('/', function(req, res){
 
 app.use('/lib', express.static('lib'));
 app.use('/models', express.static('models'));
+app.use('/img', express.static('img'));
 
 var cnt = 0;
 
