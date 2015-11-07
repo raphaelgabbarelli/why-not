@@ -3,6 +3,22 @@
 <head>
 <title>Accelerometer Javascript Test</title>
 <meta name="viewport" content="width=device-width,user-scalable=yes" />
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+	var socket = io();
+  var interval = setInterval(function () {
+    cnt++;
+    var x = Math.sin(cnt/10)*800 - 1500,
+        y = Math.cos(cnt/10)*100 + 100,
+        z = 0;
+    var x = Math.sin(cnt/45) * (180 / Math.PI),
+        y = Math.cos(cnt/45) * (180 / Math.PI),
+        z = 0;
+
+    socket.emit("msg", {'x': x, 'y': y, 'z': z});
+  }, 30);
+</script>
 <style>
 body {
 	font-family: helvetica, arial, sans serif;
