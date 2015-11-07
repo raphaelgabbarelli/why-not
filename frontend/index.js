@@ -10,6 +10,8 @@ app.get('/', function(req, res){
 
 app.use('/lib', express.static('lib'));
 
+var cnt = 0;
+
 io.on('connection', function(socket){
   console.log('a user connected');
 
@@ -18,12 +20,13 @@ io.on('connection', function(socket){
   });
 
   var interval = setInterval(function () {
-    var x = _.random(1, 100),
-        y = _.random(1, 100),
-        z = _.random(1, 100);
+    cnt++;
+    var x = Math.sin(cnt/20)*10,
+        y = Math.cos(cnt/20)*10,
+        z = 0;
 
     socket.emit("msg", {'x': x, 'y': y, 'z': z});
-  }, 1000);
+  }, 100);
 });
 
 http.listen(3000, function(){
