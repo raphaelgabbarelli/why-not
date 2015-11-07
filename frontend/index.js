@@ -9,6 +9,7 @@ app.get('/', function(req, res){
 });
 
 app.use('/lib', express.static('lib'));
+app.use('/models', express.static('models'));
 
 var cnt = 0;
 
@@ -21,8 +22,8 @@ io.on('connection', function(socket){
 
   var interval = setInterval(function () {
     cnt++;
-    var x = Math.sin(cnt/20)*10,
-        y = Math.cos(cnt/20)*10,
+    var x = Math.sin(cnt/10)*8,
+        y = Math.cos(cnt/10)*4 + 5,
         z = 0;
 
     socket.emit("msg", {'x': x, 'y': y, 'z': z});
