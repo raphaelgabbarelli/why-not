@@ -11,21 +11,20 @@ app.get('/', function(req, res){
 app.use('/lib', express.static('lib'));
 app.use('/models', express.static('models'));
 app.use('/img', express.static('img'));
-app.use('/client', express.static('client.html'));
-
-var cnt = 0;
+app.use('/controller.html', express.static('controller.html'));
+app.use('/display.html', express.static('display.html'));
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  console.log('User connected');
 
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log('User disconnected');
   });
 
-  socket.on("c2s", function (data) {
+  socket.on("controller2server", function (data) {
     console.log(data);
     // ...emit a "message" event to every other socket
-    socket.broadcast.emit("s2b", {
+    socket.broadcast.emit("server2display", {
       channel: socket.channel,
       message: data
     });

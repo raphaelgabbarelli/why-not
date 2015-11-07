@@ -65,11 +65,11 @@ var sphere = document.getElementById("sphere");
 if (window.DeviceMotionEvent != undefined) {
 	window.ondevicemotion = function(e) {
 		var newData = {
-			x: e.accelerationIncludingGravity.x,
-			y: e.accelerationIncludingGravity.y,
-			z: e.accelerationIncludingGravity.z
+			x: e.rotationRate.alpha,
+			y: e.rotationRate.beta,
+			z: e.rotationRate.gamma
 		};
-    socket.emit("c2s", newData);
+    socket.emit("controller2server", newData);
 		ax = event.accelerationIncludingGravity.x * 5;
 		ay = event.accelerationIncludingGravity.y * 5;
 		document.getElementById("accelerationX").innerHTML = e.accelerationIncludingGravity.x;

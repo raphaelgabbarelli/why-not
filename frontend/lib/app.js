@@ -7,7 +7,7 @@ if ( ! Detector.webgl ) {
 
 }
 
-socket.on("s2b", function(msg) {
+socket.on("server2display", function(msg) {
   // console.log(msg);
   var x = msg.message.x * 20 - 1500,
       y = msg.message.y * 3 + 150,
