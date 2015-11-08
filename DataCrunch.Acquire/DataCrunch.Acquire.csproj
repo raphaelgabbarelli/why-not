@@ -45,6 +45,7 @@
     <Compile Include="ComManager.cs" />
     <Compile Include="ComPortInfo.cs" />
     <Compile Include="Exceptions\InvalidFormatException.cs" />
+    <Compile Include="RowingSignal.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

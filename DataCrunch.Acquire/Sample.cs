@@ -40,7 +40,7 @@ namespace DataCrunch.Acquire
             for (int i = 0; i < a.parts.Length; i++)
             {
                 var difference = a.parts[i] - b.parts[i];
-                if(Math.Abs(a.parts[i] - b.parts[i]) > 100)
+                if(Math.Abs(a.parts[i] - b.parts[i]) > 10)
                 {
                     result.parts[i] = a.parts[i] - b.parts[i];
                 }

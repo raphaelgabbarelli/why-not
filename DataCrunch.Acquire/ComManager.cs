@@ -16,12 +16,18 @@ namespace DataCrunch.Acquire
         private Sample accumulated;
         private Sample smoothAccumulated;
         private Sample accumulatedTwo;
+
+        private List<RowingSignal> horizontalSignals;
+        //private List<RowingSignal> verticalSignals;
+
+        private int HORIZONTAL_SIGNAL_THRESHOLD = 3000;
         
-        public ComManager(string portName, ArduinoSampleParser sampleParser, Action<Sample, Sample> updateChart)
+        public ComManager(string portName, ArduinoSampleParser sampleParser, Action<Sample, Sample, RowingSignal> updateChart)
         {
             accumulated = new Sample();
             accumulatedTwo = new Sample();
-                        
+            horizontalSignals = new List<RowingSignal>();
+
             mySerialPort = new SerialPort("COM5");
 
             mySerialPort.BaudRate = 38400;
@@ -36,16 +42,56 @@ namespace DataCrunch.Acquire
                     SerialPort sp = (SerialPort)sender;
                     string lastRead = sp.ReadLine();
                     Sample lastSample = sampleParser.Parse(lastRead);
+
+                    RowingSignal signal = null;
+                    const int STROKE_RATE_SMOOTHING = 5;
+                    double strokeTime = -1;
+                    DateTime signalTime = DateTime.Now;
+                    if (lastSample.a >= HORIZONTAL_SIGNAL_THRESHOLD &&
+                        ((horizontalSignals.LastOrDefault() != null && horizontalSignals.Last().Phase == RowingPhases.Catch) 
+                            || horizontalSignals.LastOrDefault() == null)
+                    )
+                    {
+                        
+                        var lastRelease = horizontalSignals.LastOrDefault(s => s.Phase == RowingPhases.Release);
+                        if(lastRelease != null)
+                        {
+                            strokeTime = (signalTime - lastRelease.TimeStamp).TotalMilliseconds;
+                        }
+
+                        
+                        signal = new RowingSignal { TimeStamp = signalTime, Phase = RowingPhases.Release, StrokeTime = strokeTime };
+                        horizontalSignals.Add(signal);
+                    }
+                    else if (lastSample.a <= -HORIZONTAL_SIGNAL_THRESHOLD &&
+                                ((horizontalSignals.LastOrDefault() != null &&  horizontalSignals.Last().Phase == RowingPhases.Release) 
+                                    || horizontalSignals.LastOrDefault() == null))
+                    {
+                        var lastCatch = horizontalSignals.LastOrDefault(s => s.Phase == RowingPhases.Catch);
+                        if(lastCatch != null)
+                        {
+                            strokeTime = (signalTime - lastCatch.TimeStamp).TotalMilliseconds;
+                        }
+
+                        signal = new RowingSignal { TimeStamp = signalTime, Phase = RowingPhases.Catch, StrokeTime = strokeTime };
+                        horizontalSignals.Add(signal);
+                    }
                     
-                    SmoothingFunction(lastSample, ref smoothedValue, 0.2);
+                    if (horizontalSignals.Count >= STROKE_RATE_SMOOTHING)
+                    {
+                        var smoothedStrokeRate = horizontalSignals.OrderByDescending(s => s.TimeStamp).Take(STROKE_RATE_SMOOTHING).Average(s => 60000 / s.StrokeTime);
+                        horizontalSignals.Last().SmoothedStrokeRate = smoothedStrokeRate;
+                    }
+
+
+
+                    SmoothingFunction(lastSample, ref smoothedValue, 0.97);
                     
-                    //updateChart(accumulated);
                     accumulated = accumulated + (lastSample - smoothedValue);
-                    SmoothingFunction(accumulated, ref smoothAccumulated, 0.2);
+                    SmoothingFunction(accumulated, ref smoothAccumulated, 0.97);
                     accumulatedTwo = accumulatedTwo + ( accumulated - smoothAccumulated);
 
-                    updateChart(accumulated, lastSample);
-                    //updateChart(lastSample);
+                    updateChart(accumulated, lastSample, signal);
                     
                 }
                 catch (InvalidFormatException ex)
